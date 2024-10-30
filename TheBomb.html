@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>💣 Bomb Crash 💣</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-image: url('https://i.ibb.co/FHH40KC/abstract-luxury-blur-dark-grey-black-gradient-used-as-background-studio-wall-display-your-pr.jpg'); /* Fundo da imagem */
+      background-size: cover; /* Cobrir todo o fundo */
+      background-position: center; /* Centraliza a imagem */
+      color: #ffffff;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start; /* Alinhamento ao topo */
+      height: auto; /* Permite rolagem */
+      overflow: auto; /* Permite rolagem */
+    }
+
+    .container {
+      background-image: url('https://i.ibb.co/0950Wn3/M-rio.jpg'); /* Nova imagem de fundo */
+      background-size: cover; /* Manter as proporções */
+      border-radius: 15px;
+      box-shadow: 0 0 25px rgba(0, 0, 0, 0.5);
+      padding: 20px;
+      text-align: center;
+      width: 80vw;
+      max-width: 350px;
+      border: 4px solid #ffffff; /* Borda branca */
+      animation: borderColorChange 5s infinite; /* Animação de mudança de cor */
+    }
+
+    @keyframes borderColorChange {
+      0% { border-color: rgb(255, 0, 0); } /* Vermelho */
+      25% { border-color: rgb(0, 255, 0); } /* Verde */
+      50% { border-color: rgb(0, 0, 255); } /* Azul */
+      75% { border-color: rgb(255, 255, 0); } /* Amarelo */
+      100% { border-color: rgb(255, 0, 0); } /* Retorna ao vermelho */
+    }
+
+    #game-title {
+      margin: 0;
+      text-align: center;
+    }
+
+    #game-title img {
+      width: 100%; /* Ajustando a largura da imagem para caber */
+      height: auto; /* Mantém a proporção */
+      max-height: 160px; /* Aumentando a altura máxima da imagem */
+      object-fit: contain; /* Para cobrir o espaço sem distorcer */
+    }
+
+    #game-info {
+      margin: 20px 0;
+      font-size: 20px;
+      border: 2px solid rgba(40, 167, 69, 0.6); /* Bordas verde dinheiro com 60% de transparência */
+      border-radius: 10px;
+      padding: 10px;
+      background-color: rgba(0, 0, 0, 0.6); /* Fundo preto com 60% de opacidade */
+    }
+
+    #balance {
+      font-size: 20px;
+      color: #39FF14; /* Verde neon */
+      font-weight: bold;
+    }
+
+    .slot-machine {
+      margin-top: 20px;
+      display: grid;
+      grid-template-columns: repeat(3, 60px);
+      gap: 5px;
+      justify-content: center;
+    }
+
+    .slot {
+      width: 60px;
+      height: 60px;
+      background-color: rgba(30, 30, 30, 0.85); /* Cinza escuro com 85% de transparência */
+      border: 2px solid #ffffff; /* Borda branca fina */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      border-radius: 10px;
+      transition: all 0.1s ease;
+      color: #ffcc00;
+    }
+
+    .slot.highlight-bomb {
+      background-color: rgba(20, 20, 20, 0.8); /* Cinza bem escuro com 80% de transparência */
+    }
+
+    .slot.highlight-diamond {
+      background-color: rgba(153, 204, 255, 0.8); /* Azul claro com 80% de transparência */
+    }
+
+    .slot.highlight-star {
+      background-color: rgba(255, 215, 0, 0.8); /* Amarelo com 80% de transparência */
+    }
+
+    .controls {
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center; 
+    }
+
+    .bet-controls {
+      display: flex;
+      align-items: center; /* Alinha verticalmente os botões */
+      justify-content: center; /* Centraliza os botões horizontalmente */
+      margin-top: 10px; /* Espaçamento entre a caixa de texto e os botões */
+    }
+
+    .controls input {
+      width: 50px;
+      padding: 10px;
+      font-size: 16px;
+      border: 2px solid #ffffff; /* Borda branca fina */
+      border-radius: 5px;
+      background-color: rgba(20, 20, 20, 0.85); /* Cinza bem escuro com 85% de transparência */
+      color: #28a745;
+      text-align: center; /* Centraliza o texto */
+      font-weight: bold;
+      outline: none; /* Remove a borda ao focar */
+      -moz-appearance: textfield; /* Remove setinhas no Firefox */
+    }
+
+    /* Remove setas de numeração da caixa de texto */
+    .controls input::-webkit-inner-spin-button,
+    .controls input::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    .controls button {
+      padding: 8px 16px; /* Diminuído para deixar o botão menor */
+      background-color: rgba(30, 30, 30, 1); /* Fundo preto opaco */
+      color: white;
+      border: 2px solid #1e7e34;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.2s, border 0.2s, transform 0.1s;
+      font-weight: bold;
+      margin: 5px; /* Espaçamento entre os botões */
+    }
+
+    .controls button:hover {
+      background-color: rgba(40, 167, 69, 0.8); /* Cor mais escura ao passar o mouse */
+    }
+
+    .controls button:disabled {
+      background-color: rgba(30, 30, 30, 0.5); /* Cor mais escura quando desativado */
+      opacity: 0.6;
+      transform: translateY(2px);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+      cursor: not-allowed;
+    }
+
+    .controls #min-button,
+    .controls #max-button {
+      background-color: rgba(30, 30, 30, 1); /* Fundo preto opaco */
+      color: white; /* Cor do texto */
+      border: 2px solid #666;
+    }
+
+    .controls #min-button:hover,
+    .controls #max-button:hover {
+      background-color: rgba(40, 167, 69, 0.8); /* Cor mais escura ao passar o mouse */
+    }
+
+    #result-message {
+      display: none;
+      margin-top: 20px;
+      padding: 20px;
+      border: 1px solid #333;
+      border-radius: 5px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    }
+
+    .rules {
+      margin-top: 20px;
+      padding: 10px;
+      border: 2px solid #333;
+      border-radius: 10px;
+      background-color: rgba(0, 0, 0, 0.6); /* Fundo com 60% de opacidade */
+      color: #bbb;
+      text-align: left;
+    }
+
+    .rules p {
+      margin: 5px 0;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div id="game-title">
+      <img src="https://i.ibb.co/pQfHv5F/Captura-de-tela-2024-10-25-155943-removebg-preview-transformed.png" alt="Bomb Crash Logo">
+    </div>
+    <div id="game-info">
+      <div id="balance">🔸 Saldo: 💵 R$ <span id="balance-amount">25.00</span> 🔸</div>
+    </div>
+
+    <div class="slot-machine">
+      <div class="slot" id="slot-1">?</div>
+      <div class="slot" id="slot-2">?</div>
+      <div class="slot" id="slot-3">?</div>
+      <div class="slot" id="slot-4">?</div>
+      <div class="slot" id="slot-5">?</div>
+      <div class="slot" id="slot-6">?</div>
+      <div class="slot" id="slot-7">?</div>
+      <div class="slot" id="slot-8">?</div>
+      <div class="slot" id="slot-9">?</div>
+    </div>
+
+    <div class="controls">
+      <div class="bet-controls">
+        <input type="number" id="bet-amount" value="1.00" min="1" max="1000" step="0.01">
+        <div>
+          <button id="play-button">Jogar</button>
+        </div>
+      </div>
+      <div class="bet-controls">
+        <button id="min-button">Min</button>
+        <button id="max-button">Max</button>
+      </div>
+    </div>
+
+    <div id="result-message"></div>
+
+    <div class="rules">
+      <h3>Regras do Jogo:</h3>
+      <p>Simples! Basta selecionar o valor de aposta e jogar!</p>
+      <p>💣+💣+💣 = Você perde!</p>
+      <p>💎+💎+💎 = Lucro de 1.86x!</p>
+      <p>⭐+⭐+⭐ = Lucro de 2.86!</p>
+    </div>
+  </div>
+
+  <audio id="slot-sound" src="Sons/slot.mp3"></audio>
+  <audio id="win-sound" src="Sons/win2.mp3"></audio>
+  <audio id="lose-sound" src="Sons/win.mp3"></audio>
+  <audio id="button-sound" src="Sons/botao.mp3"></audio>
+  <audio id="background-music" src="Sons/music.mp3" loop></audio>
+
+  <script>
+    // Inicia a música de fundo
+    const backgroundMusic = document.getElementById("background-music");
+    backgroundMusic.volume = 0.1; // Volume baixo
+    backgroundMusic.play();
+
+    // Sistema de Senha
+    const correctPassword = "beta875x";
+    let userPassword = prompt("Digite seu codigo de login!"); // Mensagem de senha alterada
+
+    while (userPassword !== correctPassword) {
+      alert("Senha incorreta. Tente novamente.");
+      userPassword = prompt("Digite seu codigo de login!"); // Permite tentar novamente
+    }
+
+    let balance = 25.00; // Saldo inicial alterado para 25
+    let betAmount = 0; // Valor da aposta
+
+    function getRandomElement() {
+      const randomNum = Math.random() * 100; // Gera um número aleatório entre 0 e 100
+      if (randomNum < 65) return "💣"; // 65% de chance para Bomba
+      if (randomNum < 103) return "💎"; // 38% de chance para Diamante
+      return "⭐"; // 2% de chance para Estrela
+    }
+
+    function spinSlots() {
+      balance -= betAmount;
+      updateBalance();
+      const playButton = document.getElementById("play-button");
+
+      // Gera 9 slots
+      const slots = Array.from({ length: 9 }, getRandomElement);
+
+      // Animação dos slots
+      const revealOrder = [...Array(9).keys()].sort(() => Math.random() - 0.5);
+      revealOrder.forEach((slotIndex, index) => {
+        setTimeout(() => {
+          const slotElement = document.getElementById(`slot-${slotIndex + 1}`);
+          slotElement.innerText = slots[slotIndex];
+          playSlotSound(); // Reproduz o som ao revelar um slot
+
+          if (slots[slotIndex] === "💣") {
+            slotElement.classList.add("highlight-bomb");
+          } else if (slots[slotIndex] === "💎") {
+            slotElement.classList.add("highlight-diamond");
+          } else if (slots[slotIndex] === "⭐") {
+            slotElement.classList.add("highlight-star");
+          }
+
+          if (index === revealOrder.length - 1) {
+            setTimeout(() => {
+              checkResults(slots);
+              setTimeout(() => {
+                clearSlots();
+                setTimeout(() => {
+                  playButton.disabled = false; // Ativa o botão jogar após 0.5 segundo
+                }, 500);
+              }, 1000); // Tempo total da partida
+            }, 1000); // Reduzido para 1 segundo
+          }
+        }, index * 300); // Tempo entre as aparições
+      });
+
+      setTimeout(() => {
+        playButton.disabled = true; // Bloqueia o botão durante a partida
+      }, 0);
+    }
+
+    function clearSlots() {
+      const slots = document.querySelectorAll(".slot");
+      slots.forEach(slot => {
+        slot.innerText = "?";
+        slot.classList.remove("highlight-bomb", "highlight-diamond", "highlight-star");
+      });
+    }
+
+    function updateBalance() {
+      document.getElementById("balance-amount").innerText = balance.toFixed(2);
+    }
+
+    function checkResults(slots) {
+      const hasLost = checkForMatch(slots, "💣");
+      const hasWon = checkForMatch(slots, "💎");
+
+      if (hasLost) {
+        playLoseSound(); // Toca o som de derrota
+      } else if (hasWon) {
+        balance += betAmount * 1.86; // Ajuste para 1.86x
+        playWinSound(); // Toca o som de vitória
+      }
+
+      updateBalance();
+    }
+
+    function checkForMatch(slots, symbol) {
+      const winningCombinations = [
+        [0, 1, 2], [3, 4, 5], [6, 7, 8],
+        [0, 3, 6], [1, 4, 7], [2, 5, 8],
+        [0, 4, 8], [2, 4, 6]
+      ];
+
+      return winningCombinations.some(combination => {
+        return combination.every(index => slots[index] === symbol);
+      });
+    }
+
+    function playSlotSound() {
+      const audio = document.getElementById("slot-sound");
+      audio.currentTime = 0; // Reinicia o áudio
+      audio.play(); // Reproduz o som
+    }
+
+    function playWinSound() {
+      const audio = document.getElementById("win-sound");
+      audio.currentTime = 0; // Reinicia o áudio
+      audio.play(); // Reproduz o som de vitória
+    }
+
+    function playLoseSound() {
+      const audio = document.getElementById("lose-sound");
+      audio.currentTime = 0; // Reinicia o áudio
+      audio.play(); // Reproduz o som de derrota
+    }
+
+    // Função para ativar o botão "Min"
+    document.getElementById("min-button").addEventListener("click", () => {
+      document.getElementById("bet-amount").value = "1.00"; // Define o valor mínimo
+      playButtonSound(); // Toca o som do botão
+    });
+
+    // Função para ativar o botão "Max"
+    document.getElementById("max-button").addEventListener("click", () => {
+      document.getElementById("bet-amount").value = "100.00"; // Define o valor máximo
+      playButtonSound(); // Toca o som do botão
+    });
+
+    document.getElementById("play-button").addEventListener("click", () => {
+      betAmount = parseFloat(document.getElementById("bet-amount").value);
+      if (betAmount && betAmount >= 1 && betAmount <= 1000 && betAmount <= balance) {
+        spinSlots();
+      } else {
+        alert("Saldo inválido. Tente novamente!"); // Mensagem de erro
+      }
+      playButtonSound(); // Toca o som do botão ao jogar
+    });
+
+    function playButtonSound() {
+      const audio = document.getElementById("button-sound");
+      audio.currentTime = 0; // Reinicia o áudio
+      audio.play(); // Reproduz o som do botão
+    }
+  </script>
+
+</body>
+</html>
